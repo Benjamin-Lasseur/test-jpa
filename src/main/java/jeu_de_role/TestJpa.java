@@ -10,6 +10,23 @@ import javax.persistence.Persistence;
 public class TestJpa {
 
 	public static void main(String[] args) {
+		Conteneur sac = new Conteneur("Sac", "Tissue", 5);
+		List<Objet> listObjet = new ArrayList<>();
+		listObjet.add(new ElementArmure("Casque", 12, "Métal", "Tête", 100));
+		listObjet.add(new Arme("BAZOOOOOOOKA", 100, "AOE", 1000));
+		listObjet.add(new Consommable("Poche de vin", 2, "Denrée", true, false, 10));
+		listObjet.stream().forEach(o -> sac.addObjet(o));
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu_essai");
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		em.persist(sac);
+		listObjet.stream().forEach(o -> em.persist(o));
+		em.getTransaction().commit();
+		em.close();
+		emf.close();
+	}
+
+	private static void instanciationPersonnage() {
 		List<ActionARealiser> listAction = new ArrayList<>();
 		listAction.add(new ActionARealiser("Attaquer", "Monstres", 12, 13));
 		listAction.add(new ActionARealiser("Defendre", "tours", 9, 11));
